@@ -11,8 +11,8 @@ export class BooksController {
     ){}
 
     @Get()
-    getAllBooks(): String{
-        return 'Todos os livros estão aqui!';
+    async getAllBooks(): Promise<Book[]>{
+        return await this.bookService.getAllBooks();
     }
 
     @Post()
