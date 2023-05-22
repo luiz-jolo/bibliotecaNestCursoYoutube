@@ -17,10 +17,37 @@ export class BooksService {
         }
         return allBooks;
     }
+
+    async getBookById(bookID : string): Promise<Book>{
+        try {
+            return await this.bookRepository.getBookById(bookID);
+        } catch (error) {
+            throw new BadRequestException('There are no results for this identifier');
+        }
+    }
     
-    async saveBook(newBook: BookDTO) : Promise<Book> {
+    async saveBook(newBook : BookDTO) : Promise<Book> {
         return await this.bookRepository.saveBook(newBook);
     }
 
+    async updateBookById(bookID : string, newBook : BookDTO) : Promise<Book>{
+        try {
+            const updatedBook = await this.bookRepository.updateBookById(bookID, newBook);
+            if(!updatedBook){
+                throw new BadRequestException('Faliure to update this book!');
+            }
+            return this.bookRepository.getBookById(bookID);
+        } catch (error) {
+            throw new BadRequestException('This book id does not found');
+        }
+    }
+
+    async deleteBookById(bookID : string): Promise<Book>{
+        try {
+            return await this.bookRepository.deleteBookById(bookID);
+        } catch (error) {
+            throw new BadRequestException('This book does not exist');
+        }
+    }
     
 }
