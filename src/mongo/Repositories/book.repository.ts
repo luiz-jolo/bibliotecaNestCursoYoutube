@@ -19,6 +19,17 @@ export class BookRepository {
         return await this.bookModel.findById(bookID, { __v : false});
     }
 
+    async getBookAuthorName(authorName : string[]) : Promise<Book[]>{
+        //sintax mongodb
+        return await this.bookModel.find({
+            $or : [
+                {"author.name" : { $in : authorName }},
+                {"author.surname" : { $in : authorName }}
+            ]  
+        })
+
+    }
+
     async saveBook(newBook : BookDTO): Promise<Book>{
         const createdBook = new this.bookModel(newBook);
         return createdBook.save();

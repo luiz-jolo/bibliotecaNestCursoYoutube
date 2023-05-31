@@ -25,6 +25,23 @@ export class BooksService {
             throw new BadRequestException('There are no results for this identifier');
         }
     }
+
+    async getBookByAuthorName(authorName : string) : Promise<Book[]>{
+        
+        //separando
+        const splitedAuthorName = authorName.split(' ');
+        const foundBooks = await this.bookRepository.getBookAuthorName(splitedAuthorName);
+        
+        if(!foundBooks.length)
+            throw new BadRequestException('There are no books of ' + authorName +  ' author')
+
+        return foundBooks;
+        // try {
+        //     return await this.bookRepository.getBookAuthorName(authorName);
+        // } catch (error) {
+        //     throw new BadRequestException('There are no results for this author');
+        // }
+    }
     
     async saveBook(newBook : BookDTO) : Promise<Book> {
         return await this.bookRepository.saveBook(newBook);
